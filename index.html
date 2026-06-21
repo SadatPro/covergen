@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Report Generator</title>
+  
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Load PDF-lib for PDF Manipulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+  <style>
+    /* Custom scrollbar for light panels */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 0.5); 
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1; 
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8; 
+    }
+
+    /* Custom scrollbar for dark preview panel */
+    .dark-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .dark-scrollbar::-webkit-scrollbar-track {
+      background: #1e293b; 
+      border-radius: 4px;
+    }
+    .dark-scrollbar::-webkit-scrollbar-thumb {
+      background: #475569; 
+      border-radius: 4px;
+    }
+    .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #64748b; 
+    }
+    
+    /* Smooth transitions */
+    .page-preview {
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 text-slate-800 p-4 md:p-8 font-sans w-full overflow-x-hidden">
+
+  <div class="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-8 w-full">
+    
+    <!-- Left Column: Controls & Forms -->
+    <div class="w-full lg:w-[45%] flex flex-col space-y-6">
+      
+      <!-- Cover Page Info Form -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-xl shadow-indigo-100/50 border border-white">
+        <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-600 mb-6 flex items-center gap-3">
+           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+           Cover Page Info
+        </h2>
+        
+        <div class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Course Title</label>
+              <input type="text" data-bind="courseTitle" value="OOP LAB." class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Course Code</label>
+              <input type="text" data-bind="courseCode" value="CSE-214" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-5">
+            <h3 class="font-bold text-slate-800 mb-3 ml-1">Submitted To</h3>
+            <div class="space-y-4">
+              <input type="text" data-bind="submittedToName" value="(Dr. Monzur Morshed)" placeholder="Instructor Name" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <input type="text" data-bind="submittedToDept" value="CSE" placeholder="Department" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+                 <input type="text" data-bind="submittedToUni" value="Daffodil International University" placeholder="University" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-5">
+            <h3 class="font-bold text-slate-800 mb-3 ml-1">Submitted By</h3>
+            <div class="space-y-4">
+              <input type="text" data-bind="submittedByName" value="SADAT MAHMUD" placeholder="Student Name" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input type="text" data-bind="submittedById" value="0242220005121299" placeholder="Student ID" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+                <input type="text" data-bind="submittedBySection" value="63_A" placeholder="Section" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input type="text" data-bind="submittedByDept" value="CSE" placeholder="Department" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+                <input type="text" data-bind="submittedByUni" value="Daffodil International University" placeholder="University" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Doc Type</label>
+              <input type="text" data-bind="assignmentType" value="ASSIGNMENT" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Date</label>
+              <input type="text" data-bind="submissionDate" value="22-07-2023" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attach Pages Actions -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-xl shadow-indigo-100/50 border border-white">
+        <h2 class="text-xl font-bold text-slate-800 mb-4 ml-1">Attach Pages & PDFs</h2>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <label class="flex-1 flex flex-col items-center justify-center p-5 border-2 border-dashed border-indigo-200 rounded-2xl bg-gradient-to-br from-indigo-50/50 to-blue-50 hover:border-indigo-400 hover:from-indigo-100 hover:to-blue-100 cursor-pointer transition-all group">
+            <div class="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-indigo-600"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/></svg>
+            </div>
+            <span class="text-sm font-bold text-indigo-700">Upload PDF/Image</span>
+            <input type="file" multiple accept=".pdf,image/*" id="fileUploadInput" class="hidden" />
+          </label>
+          
+          <button onclick="startCamera()" class="flex-1 flex flex-col items-center justify-center p-5 border-2 border-dashed border-emerald-200 rounded-2xl bg-gradient-to-br from-emerald-50/50 to-teal-50 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 cursor-pointer transition-all group">
+            <div class="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-emerald-600"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+            <span class="text-sm font-bold text-emerald-700">Scan via Camera</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Document Order & Generate -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-xl shadow-indigo-100/50 border border-white">
+        <h2 class="text-xl font-bold text-slate-800 mb-5 ml-1 flex items-center justify-between">
+          Document Order
+          <span id="docCount" class="text-xs bg-indigo-100 px-3 py-1.5 rounded-full text-indigo-700 font-bold">1 items</span>
+        </h2>
+        
+        <div id="documentList" class="space-y-3 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+          <!-- Documents will be rendered here dynamically -->
+        </div>
+
+        <button 
+          id="generateBtn"
+          onclick="generateFinalPDF()"
+          class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-3"
+        >
+          <svg id="genIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          <div id="genSpinner" class="hidden animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+          <span id="genText" class="text-lg">Generate & Download PDF</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Column: Live HTML Preview (Exactly A4 & Responsive) -->
+    <div 
+      id="previewContainer"
+      class="w-full lg:w-[55%] min-h-[500px] h-[calc(100vh-4rem)] bg-slate-900 rounded-[2rem] p-4 md:p-8 flex justify-center overflow-y-scroll overflow-x-hidden shadow-2xl shadow-slate-900/20 border-4 border-slate-800 dark-scrollbar relative"
+    >
+       <!-- Scaler Wrapper -->
+       <div id="previewInnerScaler" style="flex-shrink: 0; transition: height 0.3s ease;">
+         <!-- Flex container for pages -->
+         <div id="previewFlexBox" style="width: 794px; transform-origin: top left; display: flex; flex-direction: column; gap: 32px;">
+           
+           <!-- Exact A4 Page Element (Cover Page) -->
+           <div 
+             id="a4Page"
+             class="bg-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col font-sans shrink-0 relative rounded-sm page-preview"
+             style="width: 794px; height: 1123px; padding: 96px 112px; box-sizing: border-box; order: 0;"
+           >
+                <!-- Cover Page Label -->
+                <div class="absolute bottom-6 right-6 bg-slate-900/80 backdrop-blur text-white px-4 py-2 rounded-full font-medium text-sm z-20 shadow-lg">
+                  Cover Page &middot; Auto
+                </div>
+
+                <!-- Logo Section -->
+                <div class="flex justify-center mb-12">
+                  <img 
+                    src="https://i.ibb.co.com/zhDVMYYc/image1.png" 
+                    alt="Daffodil International University" 
+                    class="w-[350px] h-auto object-contain"
+                  />
+                </div>
+
+                <!-- Assignment Title -->
+                <div class="w-full border-t-2 border-b-2 border-slate-300 py-4 my-8 text-center">
+                  <h1 id="preview-assignmentType" class="text-3xl font-black text-slate-800 tracking-widest uppercase">
+                    ASSIGNMENT
+                  </h1>
+                </div>
+
+                <!-- Course Details -->
+                <div class="text-center space-y-3 mb-14">
+                  <p class="text-xl text-slate-900">
+                    <span class="font-bold">Course Title: </span>
+                    <span id="preview-courseTitle">OOP LAB.</span>
+                  </p>
+                  <p class="text-xl text-slate-900">
+                    <span class="font-bold">Course Code: </span>
+                    <span id="preview-courseCode">CSE-214</span>
+                  </p>
+                </div>
+
+                <!-- Submission Details Container -->
+                <div class="flex flex-col items-center w-full gap-12">
+                  <!-- Submitted To -->
+                  <div class="text-center w-full space-y-2">
+                    <p class="text-xl text-slate-900 mb-4">
+                      <span class="font-bold">Submitted </span> To: <span id="preview-submittedToName">(Dr. Monzur Morshed)</span>
+                    </p>
+                    <p class="text-xl text-slate-900">
+                      Department Of <span id="preview-submittedToDept" class="font-bold">CSE</span>
+                    </p>
+                    <p id="preview-submittedToUni" class="text-xl text-slate-900">
+                      Daffodil International University
+                    </p>
+                  </div>
+
+                  <!-- Submitted By -->
+                  <div class="text-center w-full space-y-2">
+                    <p class="text-xl text-slate-900 mb-4">
+                      <span class="font-bold">Submitted </span> By:
+                    </p>
+                    <p class="text-xl text-slate-900">
+                      <span class="font-bold">Name: </span><span id="preview-submittedByName">SADAT MAHMUD</span>
+                    </p>
+                    <p class="text-xl text-slate-900">
+                      <span class="font-bold">ID: </span><span id="preview-submittedById">0242220005121299</span>
+                    </p>
+                    <p class="text-xl text-slate-900">
+                      <span class="font-bold">Section: </span><span id="preview-submittedBySection">63_A</span>
+                    </p>
+                    <p class="text-xl text-slate-900 mt-4">
+                      Department Of <span id="preview-submittedByDept" class="font-bold">CSE</span>
+                    </p>
+                    <p id="preview-submittedByUni" class="text-xl text-slate-900">
+                      Daffodil International University
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Footer Date -->
+                <div class="mt-auto border-t-2 border-slate-300 pt-4 text-center">
+                  <p class="text-xl text-slate-700">
+                    Date of Submission: <span id="preview-submissionDate" class="font-medium text-slate-900">22-07-2023</span>
+                  </p>
+                </div>
+           </div>
+
+           <!-- Added PDF/Image Previews will be injected here dynamically -->
+
+         </div>
+       </div>
+    </div>
+  </div>
+
+  <!-- Camera Modal -->
+  <div id="cameraModal" class="fixed inset-0 z-50 bg-slate-900/90 hidden items-center justify-center p-4 backdrop-blur-md">
+    <div class="bg-white rounded-[2rem] max-w-2xl w-full p-6 relative shadow-2xl flex flex-col border border-slate-200">
+      <div class="flex justify-between items-center mb-6">
+         <h3 class="text-2xl font-bold text-slate-800">Scan Document</h3>
+         <button onclick="stopCamera()" class="p-3 bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-600 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+         </button>
+      </div>
+      
+      <div id="cameraErrorBox" class="bg-red-50 text-red-600 p-4 rounded-xl hidden items-center gap-3 mb-4 border border-red-200">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <span id="cameraErrorMsg" class="font-medium"></span>
+      </div>
+
+      <div id="cameraFeedBox" class="relative bg-slate-900 rounded-2xl overflow-hidden aspect-[3/4] flex items-center justify-center shadow-inner">
+        <video id="videoFeed" autoplay playsinline class="absolute w-full h-full object-cover"></video>
+        <!-- Overlay Grid for guidance -->
+        <div class="absolute inset-0 border-2 border-white/20 m-8 rounded-lg pointer-events-none"></div>
+      </div>
+      
+      <div id="cameraActions" class="mt-8 flex justify-center pb-2">
+        <button onclick="capturePhoto()" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full p-5 shadow-xl shadow-emerald-200 ring-4 ring-emerald-50 transition-all active:scale-95 group">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </button>
+      </div>
+
+      <!-- Hidden canvas for photo capture -->
+      <canvas id="cameraCanvas" class="hidden"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // --- Application State ---
+    const coverData = {
+      courseTitle: 'OOP LAB.',
+      courseCode: 'CSE-214',
+      submittedToName: '(Dr. Monzur Morshed)',
+      submittedToDept: 'CSE',
+      submittedToUni: 'Daffodil International University',
+      submittedByName: 'SADAT MAHMUD',
+      submittedById: '0242220005121299',
+      submittedBySection: '63_A',
+      submittedByDept: 'CSE',
+      submittedByUni: 'Daffodil International University',
+      submissionDate: '22-07-2023',
+      assignmentType: 'ASSIGNMENT'
+    };
+
+    let documents = [
+      { id: 'cover-page-1', type: 'cover', name: 'Cover Page (Auto-Generated)' }
+    ];
+
+    let isGenerating = false;
+    let videoStream = null;
+    let currentPreviewWidth = 0;
+
+    // --- DOM Elements ---
+    const previewContainer = document.getElementById('previewContainer');
+    const previewInnerScaler = document.getElementById('previewInnerScaler');
+    const previewFlexBox = document.getElementById('previewFlexBox');
+    const a4Page = document.getElementById('a4Page');
+    const documentListEl = document.getElementById('documentList');
+    const docCountEl = document.getElementById('docCount');
+    const fileUploadInput = document.getElementById('fileUploadInput');
+    
+    // Camera Elements
+    const cameraModal = document.getElementById('cameraModal');
+    const videoFeed = document.getElementById('videoFeed');
+    const cameraCanvas = document.getElementById('cameraCanvas');
+    const cameraErrorBox = document.getElementById('cameraErrorBox');
+    const cameraErrorMsg = document.getElementById('cameraErrorMsg');
+    const cameraFeedBox = document.getElementById('cameraFeedBox');
+    const cameraActions = document.getElementById('cameraActions');
+
+    // Generate Button Elements
+    const generateBtn = document.getElementById('generateBtn');
+    const genIcon = document.getElementById('genIcon');
+    const genSpinner = document.getElementById('genSpinner');
+    const genText = document.getElementById('genText');
+
+    // --- Initialization ---
+    function init() {
+      // 1. Setup Input Data Binding
+      const inputs = document.querySelectorAll('input[data-bind]');
+      inputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+          const key = e.target.getAttribute('data-bind');
+          coverData[key] = e.target.value;
+          
+          // Update preview if element exists
+          const previewEl = document.getElementById(`preview-${key}`);
+          if (previewEl) {
+            previewEl.textContent = e.target.value;
+          }
+        });
+      });
+
+      // 2. Setup Responsive Scaler 
+      let resizeFrame;
+      const observer = new ResizeObserver((entries) => {
+        if (resizeFrame) window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(() => {
+          for (let entry of entries) {
+            currentPreviewWidth = entry.contentRect.width;
+            updatePreviewScale();
+          }
+        });
+      });
+      observer.observe(previewContainer);
+
+      // 3. Setup File Upload Listener
+      fileUploadInput.addEventListener('change', handleFileUpload);
+
+      // 4. Render initial document list & previews
+      renderDocumentList();
+    }
+
+    // --- Scaling Logic for Multiple Pages ---
+    function updatePreviewScale() {
+      if (!currentPreviewWidth) return;
+      
+      // Calculate scale to fit width (leaving some margin for scrollbar & aesthetics)
+      const margin = window.innerWidth < 1024 ? 32 : 64; 
+      const newScale = Math.min(1, (currentPreviewWidth - margin) / 794);
+      
+      if (previewFlexBox) {
+          previewFlexBox.style.transform = `scale(${newScale})`;
+      }
+      
+      const numDocs = documents.length;
+      const gap = 32;
+      const totalHeight = (numDocs * 1123) + ((numDocs - 1) * gap);
+      
+      if (previewInnerScaler) {
+          previewInnerScaler.style.width = `${794 * newScale}px`;
+          // Ensure container height wraps the scaled flexbox properly to allow scrolling
+          previewInnerScaler.style.height = `${totalHeight * newScale}px`;
+      }
+    }
+
+    // --- Document Previews Generation ---
+    function renderPreviews() {
+        // Clear all dynamically added pages
+        const dynamicPages = previewFlexBox.querySelectorAll('.dynamic-page');
+        dynamicPages.forEach(p => p.remove());
+
+        // Ensure Cover page gets correct order position
+        const coverIdx = documents.findIndex(d => d.type === 'cover');
+        if (a4Page) a4Page.style.order = coverIdx;
+
+        // Render each uploaded/scanned document
+        documents.forEach((doc, idx) => {
+            if (doc.type === 'cover') return;
+
+            const pageEl = document.createElement('div');
+            // Give them the same dimensions and shadowing as the Cover
+            pageEl.className = 'dynamic-page page-preview bg-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col shrink-0 overflow-hidden relative rounded-sm';
+            pageEl.style.width = '794px';
+            pageEl.style.height = '1123px';
+            pageEl.style.order = idx;
+
+            // Page label at the bottom right
+            const label = document.createElement('div');
+            label.className = 'absolute bottom-6 right-6 bg-slate-900/80 backdrop-blur text-white px-4 py-2 rounded-full font-medium text-sm z-20 shadow-lg';
+            label.innerHTML = `Page ${idx + 1} &middot; ${doc.type === 'pdf' ? 'PDF' : 'IMAGE'}`;
+            pageEl.appendChild(label);
+
+            if (doc.type === 'image' || doc.type === 'scanned-image') {
+                const img = document.createElement('img');
+                img.src = doc.objectUrl || doc.dataUrl;
+                img.className = 'w-full h-full object-contain p-8'; // Padding so images don't clip the edges
+                pageEl.appendChild(img);
+            } 
+            else if (doc.type === 'pdf') {
+                // Use an embed tag to display the first page of the PDF cleanly
+                const embed = document.createElement('embed');
+                embed.src = `${doc.objectUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+                embed.type = 'application/pdf';
+                embed.className = 'w-full h-full border-0 pointer-events-none'; // disable pointer so it doesn't steal scroll
+                pageEl.appendChild(embed);
+                
+                // Add invisible overlay to ensure the user can scroll past the PDF preview easily
+                const overlay = document.createElement('div');
+                overlay.className = 'absolute inset-0 z-10 bg-transparent';
+                pageEl.appendChild(overlay);
+            }
+            
+            previewFlexBox.appendChild(pageEl);
+        });
+
+        // Recalculate heights since number of pages changed
+        updatePreviewScale();
+    }
+
+    // --- Document List Management ---
+    function renderDocumentList() {
+      docCountEl.textContent = `${documents.length} items`;
+      documentListEl.innerHTML = '';
+
+      documents.forEach((doc, idx) => {
+        const docEl = document.createElement('div');
+        docEl.className = "flex items-center gap-3 bg-white p-3 rounded-xl border border-indigo-50 shadow-sm group hover:border-indigo-300 hover:shadow-md transition-all";
+        
+        // Define Icon based on type
+        let iconHtml = '';
+        if (doc.type === 'cover') {
+          iconHtml = `<div class="p-2 bg-indigo-50 rounded-lg"><svg class="text-indigo-600 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg></div>`;
+        } else if (doc.type === 'pdf') {
+          iconHtml = `<div class="p-2 bg-red-50 rounded-lg"><svg class="text-red-500 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="m9 15 3-3 3 3"/></svg></div>`;
+        } else {
+          iconHtml = `<div class="p-2 bg-emerald-50 rounded-lg"><svg class="text-emerald-600 flex-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="13" r="2"/><path d="m20 17-1.09-1.09a2 2 0 0 0-2.82 0L10 22"/></svg></div>`;
+        }
+
+        // Up/Down Buttons state
+        const upDisabled = idx === 0 ? 'disabled opacity-30 cursor-not-allowed' : 'hover:text-indigo-600 hover:bg-indigo-50 rounded';
+        const downDisabled = idx === documents.length - 1 ? 'disabled opacity-30 cursor-not-allowed' : 'hover:text-indigo-600 hover:bg-indigo-50 rounded';
+
+        docEl.innerHTML = `
+          <div class="flex flex-col gap-0.5">
+            <button onclick="moveDocument(${idx}, -1)" class="text-slate-400 p-1 transition-colors ${upDisabled}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+            <button onclick="moveDocument(${idx}, 1)" class="text-slate-400 p-1 transition-colors ${downDisabled}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+          </div>
+          <div class="flex-1 flex items-center gap-3 overflow-hidden">
+            ${iconHtml}
+            <span class="text-sm font-bold truncate text-slate-700" title="${doc.name}">${doc.name}</span>
+          </div>
+          ${doc.type !== 'cover' ? `
+            <button onclick="removeDocument('${doc.id}')" class="text-slate-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 transition-colors">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            </button>
+          ` : ''}
+        `;
+        
+        documentListEl.appendChild(docEl);
+      });
+
+      renderPreviews();
+    }
+
+    function handleFileUpload(e) {
+      const files = Array.from(e.target.files);
+      const newDocs = files.map(file => ({
+        id: Math.random().toString(36).substr(2, 9),
+        type: file.type === 'application/pdf' ? 'pdf' : 'image',
+        name: file.name,
+        file: file,
+        objectUrl: URL.createObjectURL(file) // Create URL for Live Preview
+      }));
+      documents = [...documents, ...newDocs];
+      renderDocumentList();
+      e.target.value = ''; // Reset input
+    }
+
+    function moveDocument(index, direction) {
+      if ((direction === -1 && index === 0) || (direction === 1 && index === documents.length - 1)) return;
+      const temp = documents[index];
+      documents[index] = documents[index + direction];
+      documents[index + direction] = temp;
+      renderDocumentList();
+    }
+
+    function removeDocument(id) {
+      const docToRemove = documents.find(d => d.id === id);
+      if (docToRemove && docToRemove.objectUrl) {
+          URL.revokeObjectURL(docToRemove.objectUrl); // Clean up memory
+      }
+      documents = documents.filter(doc => doc.id !== id);
+      renderDocumentList();
+    }
+
+    // --- Camera Logic ---
+    async function startCamera() {
+      cameraErrorBox.classList.add('hidden');
+      cameraModal.classList.remove('hidden');
+      cameraModal.classList.add('flex');
+      cameraFeedBox.classList.remove('hidden');
+      cameraActions.classList.remove('hidden');
+
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment' } 
+        });
+        videoFeed.srcObject = videoStream;
+      } catch (err) {
+        cameraFeedBox.classList.add('hidden');
+        cameraActions.classList.add('hidden');
+        cameraErrorBox.classList.remove('hidden');
+        cameraErrorBox.classList.add('flex');
+        cameraErrorMsg.textContent = 'Unable to access camera. Please check permissions.';
+      }
+    }
+
+    function stopCamera() {
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+      }
+      cameraModal.classList.add('hidden');
+      cameraModal.classList.remove('flex');
+    }
+
+    function capturePhoto() {
+      if (videoStream && videoFeed) {
+        cameraCanvas.width = videoFeed.videoWidth;
+        cameraCanvas.height = videoFeed.videoHeight;
+        const ctx = cameraCanvas.getContext('2d');
+        ctx.drawImage(videoFeed, 0, 0, cameraCanvas.width, cameraCanvas.height);
+        
+        const dataUrl = cameraCanvas.toDataURL('image/jpeg', 0.9);
+        documents.push({
+          id: Math.random().toString(36).substr(2, 9),
+          type: 'scanned-image',
+          name: `Scanned Page ${new Date().toLocaleTimeString()}`,
+          dataUrl: dataUrl
+        });
+        
+        stopCamera();
+        renderDocumentList();
+      }
+    }
+
+    // --- PDF Generation Logic ---
+    function setGeneratingState(isGen) {
+      isGenerating = isGen;
+      if (isGen) {
+        generateBtn.classList.add('opacity-75', 'cursor-not-allowed');
+        genIcon.classList.add('hidden');
+        genSpinner.classList.remove('hidden');
+        genText.textContent = "Generating PDF...";
+      } else {
+        generateBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        genIcon.classList.remove('hidden');
+        genSpinner.classList.add('hidden');
+        genText.textContent = "Generate & Download PDF";
+      }
+    }
+
+    async function generateFinalPDF() {
+      if (!window.PDFLib) {
+        alert("Please wait, the PDF library is still loading...");
+        return;
+      }
+      
+      if (isGenerating) return;
+      setGeneratingState(true);
+
+      try {
+        const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+        const finalPdf = await PDFDocument.create();
+        
+        const helveticaFont = await finalPdf.embedFont(StandardFonts.Helvetica);
+        const helveticaBold = await finalPdf.embedFont(StandardFonts.HelveticaBold);
+
+        for (let i = 0; i < documents.length; i++) {
+          const docInfo = documents[i];
+
+          if (docInfo.type === 'cover') {
+            // 1. Generate Cover natively using pdf-lib (Vector Text, Crisp Output)
+            const width = 595.28;
+            const height = 841.89; // Standard A4 points
+            const page = finalPdf.addPage([width, height]);
+            
+            const drawCenter = (text, y, font, size) => {
+              const tWidth = font.widthOfTextAtSize(text, size);
+              page.drawText(text, { x: (width - tWidth) / 2, y, font, size, color: rgb(0,0,0) });
+            };
+
+            const drawMixedCenter = (segments, y, size) => {
+              let totalWidth = 0;
+              segments.forEach(seg => { totalWidth += seg.font.widthOfTextAtSize(seg.text, size); });
+              let currentX = (width - totalWidth) / 2;
+              segments.forEach(seg => {
+                page.drawText(seg.text, { x: currentX, y, font: seg.font, size, color: rgb(0,0,0) });
+                currentX += seg.font.widthOfTextAtSize(seg.text, size);
+              });
+            };
+
+            // Draw Logo
+            try {
+              const logoUrl = 'https://i.ibb.co.com/zhDVMYYc/image1.png';
+              const response = await fetch(logoUrl);
+              const logoBytes = await response.arrayBuffer();
+              const logoImage = await finalPdf.embedPng(logoBytes);
+              const logoWidth = 220;
+              const logoHeight = (logoWidth / logoImage.width) * logoImage.height;
+              page.drawImage(logoImage, {
+                x: (width - logoWidth) / 2,
+                y: height - 70 - logoHeight,
+                width: logoWidth,
+                height: logoHeight
+              });
+            } catch (e) { console.error("Logo fetch failed", e); }
+
+            // Borders / Title
+            const titleY = height - 220;
+            page.drawLine({ start: {x: 60, y: titleY + 30}, end: {x: width - 60, y: titleY + 30}, thickness: 1, color: rgb(0.8,0.8,0.8) });
+            drawCenter(coverData.assignmentType || 'ASSIGNMENT', titleY, helveticaBold, 22);
+            page.drawLine({ start: {x: 60, y: titleY - 15}, end: {x: width - 60, y: titleY - 15}, thickness: 1, color: rgb(0.8,0.8,0.8) });
+
+            // Course Details
+            drawMixedCenter([
+              {text: 'Course Title: ', font: helveticaBold},
+              {text: coverData.courseTitle, font: helveticaFont}
+            ], height - 280, 12);
+            drawMixedCenter([
+              {text: 'Course Code: ', font: helveticaBold},
+              {text: coverData.courseCode, font: helveticaFont}
+            ], height - 305, 12);
+
+            // Submitted To
+            drawMixedCenter([
+              {text: 'Submitted ', font: helveticaBold},
+              {text: 'To: ', font: helveticaFont},
+              {text: coverData.submittedToName, font: helveticaFont}
+            ], height - 380, 12);
+            drawMixedCenter([
+              {text: 'Department Of ', font: helveticaFont},
+              {text: coverData.submittedToDept, font: helveticaBold}
+            ], height - 405, 12);
+            drawCenter(coverData.submittedToUni, height - 425, helveticaFont, 12);
+
+            // Submitted By
+            drawMixedCenter([
+              {text: 'Submitted ', font: helveticaBold},
+              {text: 'By:', font: helveticaFont}
+            ], height - 485, 12);
+            drawMixedCenter([
+              {text: 'Name: ', font: helveticaBold},
+              {text: coverData.submittedByName, font: helveticaFont}
+            ], height - 510, 12);
+            drawMixedCenter([
+              {text: 'ID: ', font: helveticaBold},
+              {text: coverData.submittedById, font: helveticaFont}
+            ], height - 535, 12);
+            drawMixedCenter([
+              {text: 'Section: ', font: helveticaBold},
+              {text: coverData.submittedBySection, font: helveticaFont}
+            ], height - 560, 12);
+            drawMixedCenter([
+              {text: 'Department Of ', font: helveticaFont},
+              {text: coverData.submittedByDept, font: helveticaBold}
+            ], height - 585, 12);
+            drawCenter(coverData.submittedByUni, height - 605, helveticaFont, 12);
+
+            // Footer
+            page.drawLine({ start: {x: 60, y: 120}, end: {x: width - 60, y: 120}, thickness: 1, color: rgb(0.8,0.8,0.8) });
+            drawMixedCenter([
+              {text: 'Date of Submission: ', font: helveticaFont},
+              {text: coverData.submissionDate, font: helveticaFont}
+            ], 95, 12);
+          } 
+          else if (docInfo.type === 'pdf') {
+            // 2. Append existing PDFs
+            const arrayBuffer = await docInfo.file.arrayBuffer();
+            const existingPdf = await PDFDocument.load(arrayBuffer);
+            const copiedPages = await finalPdf.copyPages(existingPdf, existingPdf.getPageIndices());
+            copiedPages.forEach((page) => finalPdf.addPage(page));
+          }
+          else if (docInfo.type === 'image' || docInfo.type === 'scanned-image') {
+            // 3. Append Scanned or Uploaded Images
+            let imgBytes;
+            if (docInfo.type === 'image') {
+               imgBytes = await docInfo.file.arrayBuffer();
+            } else {
+               const response = await fetch(docInfo.dataUrl);
+               imgBytes = await response.arrayBuffer();
+            }
+            
+            let embeddedImage;
+            try {
+               embeddedImage = await finalPdf.embedJpg(imgBytes);
+            } catch(e) {
+               embeddedImage = await finalPdf.embedPng(imgBytes);
+            }
+
+            const page = finalPdf.addPage([595.28, 841.89]);
+            const { width, height } = embeddedImage.scaleToFit(595.28 - 40, 841.89 - 40); 
+            
+            page.drawImage(embeddedImage, {
+              x: (595.28 - width) / 2,
+              y: (841.89 - height) / 2,
+              width,
+              height,
+            });
+          }
+        }
+
+        // Save and Download
+        const pdfBytes = await finalPdf.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Lab_Report_${coverData.courseCode}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        alert("An error occurred while generating the PDF. Please try again.");
+      } finally {
+        setGeneratingState(false);
+      }
+    }
+
+    // Run initialization on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
