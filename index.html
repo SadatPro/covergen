@@ -59,27 +59,52 @@
       
       <!-- Cover Page Info Form -->
       <div class="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-xl shadow-indigo-100/50 border border-white">
-        <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-600 mb-6 flex items-center gap-3">
-           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-           Cover Page Info
-        </h2>
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-600 flex items-center gap-3">
+             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+             Cover Page Info
+          </h2>
+          <button onclick="resetFields()" class="text-sm font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors border border-red-100">Reset All</button>
+        </div>
         
         <div class="space-y-5">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Course Title</label>
-              <input type="text" data-bind="courseTitle" value="OOP LAB." class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <input type="text" data-bind="courseTitle" list="courseTitles" value="" placeholder="e.g. Object Oriented Programming II" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <datalist id="courseTitles">
+                <option value="Object Oriented Programming II"></option>
+                <option value="Computer Architecture and Organization"></option>
+                <option value="Data Communication"></option>
+                <option value="Algorithms"></option>
+                <option value="FYDP (Phase-I)"></option>
+                <option value="Operating Systems Lab."></option>
+              </datalist>
             </div>
             <div>
               <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Course Code</label>
-              <input type="text" data-bind="courseCode" value="CSE-214" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <input type="text" data-bind="courseCode" list="courseCodes" value="" placeholder="e.g. CSE221" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <datalist id="courseCodes">
+                <option value="CSE221"></option>
+                <option value="CSE335"></option>
+                <option value="CSE225"></option>
+                <option value="CSE231"></option>
+                <option value="CSE499"></option>
+                <option value="CSE324"></option>
+              </datalist>
             </div>
           </div>
 
           <div class="border-t border-slate-100 pt-5">
             <h3 class="font-bold text-slate-800 mb-3 ml-1">Submitted To</h3>
             <div class="space-y-4">
-              <input type="text" data-bind="submittedToName" value="(Dr. Monzur Morshed)" placeholder="Instructor Name" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <input type="text" data-bind="submittedToName" list="teachers" value="" placeholder="Instructor Name" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <datalist id="teachers">
+                <option value="Ms. Farjana Akter"></option>
+                <option value="Raja Tariqul Hasan Tusher"></option>
+                <option value="Md. Touhidul Islam Sovon"></option>
+                <option value="Md. Taufik Hasan"></option>
+              </datalist>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                  <input type="text" data-bind="submittedToDept" value="CSE" placeholder="Department" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
                  <input type="text" data-bind="submittedToUni" value="Daffodil International University" placeholder="University" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
@@ -93,7 +118,13 @@
               <input type="text" data-bind="submittedByName" value="SADAT MAHMUD" placeholder="Student Name" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input type="text" data-bind="submittedById" value="0242220005121299" placeholder="Student ID" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
-                <input type="text" data-bind="submittedBySection" value="63_A" placeholder="Section" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+                <input type="text" data-bind="submittedBySection" list="sections" value="" placeholder="Section (e.g. 64_A)" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+                <datalist id="sections">
+                  <option value="RE_A(1C)"></option>
+                  <option value="RE_A(3C)"></option>
+                  <option value="64_A"></option>
+                  <option value="RE_A1(2C)"></option>
+                </datalist>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input type="text" data-bind="submittedByDept" value="CSE" placeholder="Department" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
@@ -102,14 +133,45 @@
             </div>
           </div>
 
-          <div class="border-t border-slate-100 pt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="border-t border-slate-100 pt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Doc Type</label>
-              <input type="text" data-bind="assignmentType" value="ASSIGNMENT" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <input type="text" data-bind="assignmentType" list="docTypes" value="" placeholder="e.g. ASSIGNMENT" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <datalist id="docTypes">
+                <option value="ASSIGNMENT"></option>
+                <option value="LAB REPORT"></option>
+                <option value="PROJECT PROPOSAL"></option>
+              </datalist>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">No. (Lab/Assignment)</label>
+              <input type="text" data-bind="assignmentNo" list="assignmentNumbers" value="" placeholder="e.g. 1" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <datalist id="assignmentNumbers">
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+                <option value="6"></option>
+                <option value="7"></option>
+                <option value="8"></option>
+                <option value="9"></option>
+                <option value="10"></option>
+                <option value="11"></option>
+                <option value="12"></option>
+                <option value="13"></option>
+                <option value="14"></option>
+                <option value="15"></option>
+                <option value="16"></option>
+                <option value="17"></option>
+                <option value="18"></option>
+                <option value="19"></option>
+                <option value="20"></option>
+              </datalist>
             </div>
             <div>
               <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Date</label>
-              <input type="text" data-bind="submissionDate" value="22-07-2023" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+              <input type="text" data-bind="submissionDate" value="" placeholder="DD-MM-YYYY" class="w-full px-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
             </div>
           </div>
         </div>
@@ -145,6 +207,14 @@
         
         <div id="documentList" class="space-y-3 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
           <!-- Documents will be rendered here dynamically -->
+        </div>
+        
+        <div class="mb-5 border-t border-slate-100 pt-5">
+          <label class="block text-sm font-semibold text-slate-600 mb-1.5 ml-1">Export File Name</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="exportFileName" value="Lab_Report" class="w-full px-4 py-2 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white focus:outline-none transition-all" />
+            <span class="text-slate-500 font-bold text-sm bg-slate-100 px-3 py-2 rounded-xl">.pdf</span>
+          </div>
         </div>
 
         <button 
@@ -190,9 +260,9 @@
                 </div>
 
                 <!-- Assignment Title -->
-                <div class="w-full border-t-2 border-b-2 border-slate-300 py-4 my-8 text-center">
-                  <h1 id="preview-assignmentType" class="text-3xl font-black text-slate-800 tracking-widest uppercase">
-                    ASSIGNMENT
+                <div class="w-full border-t-2 border-b-2 border-slate-300 py-4 my-8 text-center flex flex-col items-center justify-center">
+                  <h1 class="text-3xl font-black text-slate-800 tracking-widest uppercase">
+                    <span id="preview-assignmentType"></span> <span id="preview-assignmentNo"></span>
                   </h1>
                 </div>
 
@@ -200,11 +270,11 @@
                 <div class="text-center space-y-3 mb-14">
                   <p class="text-xl text-slate-900">
                     <span class="font-bold">Course Title: </span>
-                    <span id="preview-courseTitle">OOP LAB.</span>
+                    <span id="preview-courseTitle"></span>
                   </p>
                   <p class="text-xl text-slate-900">
                     <span class="font-bold">Course Code: </span>
-                    <span id="preview-courseCode">CSE-214</span>
+                    <span id="preview-courseCode"></span>
                   </p>
                 </div>
 
@@ -213,7 +283,7 @@
                   <!-- Submitted To -->
                   <div class="text-center w-full space-y-2">
                     <p class="text-xl text-slate-900 mb-4">
-                      <span class="font-bold">Submitted </span> To: <span id="preview-submittedToName">(Dr. Monzur Morshed)</span>
+                      <span class="font-bold">Submitted </span> To: <span id="preview-submittedToName"></span>
                     </p>
                     <p class="text-xl text-slate-900">
                       Department Of <span id="preview-submittedToDept" class="font-bold">CSE</span>
@@ -235,7 +305,7 @@
                       <span class="font-bold">ID: </span><span id="preview-submittedById">0242220005121299</span>
                     </p>
                     <p class="text-xl text-slate-900">
-                      <span class="font-bold">Section: </span><span id="preview-submittedBySection">63_A</span>
+                      <span class="font-bold">Section: </span><span id="preview-submittedBySection"></span>
                     </p>
                     <p class="text-xl text-slate-900 mt-4">
                       Department Of <span id="preview-submittedByDept" class="font-bold">CSE</span>
@@ -249,7 +319,7 @@
                 <!-- Footer Date -->
                 <div class="mt-auto border-t-2 border-slate-300 pt-4 text-center">
                   <p class="text-xl text-slate-700">
-                    Date of Submission: <span id="preview-submissionDate" class="font-medium text-slate-900">22-07-2023</span>
+                    Date of Submission: <span id="preview-submissionDate" class="font-medium text-slate-900"></span>
                   </p>
                 </div>
            </div>
@@ -296,18 +366,19 @@
   <script>
     // --- Application State ---
     const coverData = {
-      courseTitle: 'OOP LAB.',
-      courseCode: 'CSE-214',
-      submittedToName: '(Dr. Monzur Morshed)',
+      courseTitle: '',
+      courseCode: '',
+      submittedToName: '',
       submittedToDept: 'CSE',
       submittedToUni: 'Daffodil International University',
       submittedByName: 'SADAT MAHMUD',
-      submittedById: '0242220005121299',
-      submittedBySection: '63_A',
+      submittedById: '0242220005101099',
+      submittedBySection: '',
       submittedByDept: 'CSE',
       submittedByUni: 'Daffodil International University',
-      submissionDate: '22-07-2023',
-      assignmentType: 'ASSIGNMENT'
+      submissionDate: '',
+      assignmentType: '',
+      assignmentNo: ''
     };
 
     let documents = [
@@ -317,6 +388,7 @@
     let isGenerating = false;
     let videoStream = null;
     let currentPreviewWidth = 0;
+    let userEditedFileName = false;
 
     // --- DOM Elements ---
     const previewContainer = document.getElementById('previewContainer');
@@ -342,22 +414,143 @@
     const genSpinner = document.getElementById('genSpinner');
     const genText = document.getElementById('genText');
 
+    // --- Data Mappings for Auto-Select ---
+    const courseMapping = {
+      "Object Oriented Programming II": "CSE221",
+      "Computer Architecture and Organization": "CSE335",
+      "Data Communication": "CSE225",
+      "Algorithms": "CSE231",
+      "FYDP (Phase-I)": "CSE499",
+      "Operating Systems Lab.": "CSE324"
+    };
+    const codeToCourseMapping = {
+      "CSE221": "Object Oriented Programming II",
+      "CSE335": "Computer Architecture and Organization",
+      "CSE225": "Data Communication",
+      "CSE231": "Algorithms",
+      "CSE499": "FYDP (Phase-I)",
+      "CSE324": "Operating Systems Lab."
+    };
+    const courseToTeacherMapping = {
+      "CSE221": "Ms. Farjana Akter",
+      "CSE335": "Raja Tariqul Hasan Tusher",
+      "CSE225": "Md. Touhidul Islam Sovon",
+      "CSE231": "Md. Touhidul Islam Sovon",
+      "CSE324": "Md. Taufik Hasan"
+    };
+    const courseToSectionMapping = {
+      "CSE221": "RE_A(1C)",
+      "CSE335": "RE_A(3C)",
+      "CSE225": "RE_A(3C)",
+      "CSE231": "RE_A(3C)",
+      "CSE499": "64_A",
+      "CSE324": "RE_A1(2C)"
+    };
+
     // --- Initialization ---
     function init() {
+      // Auto-set current date if empty
+      const dateInput = document.querySelector('input[data-bind="submissionDate"]');
+      if (dateInput && !dateInput.value) {
+          const today = new Date();
+          const dd = String(today.getDate()).padStart(2, '0');
+          const mm = String(today.getMonth() + 1).padStart(2, '0');
+          const yyyy = today.getFullYear();
+          const formattedDate = `${dd}-${mm}-${yyyy}`;
+          
+          dateInput.value = formattedDate;
+          coverData['submissionDate'] = formattedDate;
+          const pDate = document.getElementById('preview-submissionDate');
+          if (pDate) pDate.textContent = formattedDate;
+      }
+
       // 1. Setup Input Data Binding
       const inputs = document.querySelectorAll('input[data-bind]');
       inputs.forEach(input => {
         input.addEventListener('input', (e) => {
           const key = e.target.getAttribute('data-bind');
-          coverData[key] = e.target.value;
+          const val = e.target.value;
+          coverData[key] = val;
           
+          let updatedCourseCode = null;
+
+          // Auto select logic for Course Title & Code
+          if (key === 'courseTitle' && courseMapping[val]) {
+             const codeInput = document.querySelector('input[data-bind="courseCode"]');
+             if (codeInput) {
+                 codeInput.value = courseMapping[val];
+                 coverData['courseCode'] = courseMapping[val];
+                 const pCode = document.getElementById('preview-courseCode');
+                 if(pCode) pCode.textContent = courseMapping[val];
+                 
+                 updatedCourseCode = courseMapping[val];
+
+                 // Trigger auto filename update manually if we programmatically changed code
+                 if (!userEditedFileName) {
+                     const exportFileNameInput = document.getElementById('exportFileName');
+                     if(exportFileNameInput) {
+                        exportFileNameInput.value = `Lab_Report_${courseMapping[val]}`;
+                     }
+                 }
+             }
+          } else if (key === 'courseCode') {
+             updatedCourseCode = val;
+             if (codeToCourseMapping[val]) {
+                 const titleInput = document.querySelector('input[data-bind="courseTitle"]');
+                 if (titleInput) {
+                     titleInput.value = codeToCourseMapping[val];
+                     coverData['courseTitle'] = codeToCourseMapping[val];
+                     const pTitle = document.getElementById('preview-courseTitle');
+                     if(pTitle) pTitle.textContent = codeToCourseMapping[val];
+                 }
+             }
+          }
+
+          // Auto update teacher if course code was updated
+          if (updatedCourseCode && courseToTeacherMapping[updatedCourseCode]) {
+              const teacherInput = document.querySelector('input[data-bind="submittedToName"]');
+              if (teacherInput) {
+                  teacherInput.value = courseToTeacherMapping[updatedCourseCode];
+                  coverData['submittedToName'] = courseToTeacherMapping[updatedCourseCode];
+                  const pTeacher = document.getElementById('preview-submittedToName');
+                  if (pTeacher) pTeacher.textContent = courseToTeacherMapping[updatedCourseCode];
+              }
+          }
+
+          // Auto update section if course code was updated
+          if (updatedCourseCode && courseToSectionMapping[updatedCourseCode]) {
+              const sectionInput = document.querySelector('input[data-bind="submittedBySection"]');
+              if (sectionInput) {
+                  sectionInput.value = courseToSectionMapping[updatedCourseCode];
+                  coverData['submittedBySection'] = courseToSectionMapping[updatedCourseCode];
+                  const pSection = document.getElementById('preview-submittedBySection');
+                  if (pSection) pSection.textContent = courseToSectionMapping[updatedCourseCode];
+              }
+          }
+
+          // Auto update filename if user hasn't manually edited it
+          if (key === 'courseCode' && !userEditedFileName) {
+             const exportFileNameInput = document.getElementById('exportFileName');
+             if(exportFileNameInput) {
+                exportFileNameInput.value = val ? `Lab_Report_${val}` : 'Lab_Report';
+             }
+          }
+
           // Update preview if element exists
           const previewEl = document.getElementById(`preview-${key}`);
           if (previewEl) {
-            previewEl.textContent = e.target.value;
+            previewEl.textContent = val;
           }
         });
       });
+
+      // Track manual filename edits
+      const exportFileNameInput = document.getElementById('exportFileName');
+      if (exportFileNameInput) {
+        exportFileNameInput.addEventListener('input', () => {
+           userEditedFileName = true;
+        });
+      }
 
       // 2. Setup Responsive Scaler 
       let resizeFrame;
@@ -658,7 +851,8 @@
             // Borders / Title
             const titleY = height - 220;
             page.drawLine({ start: {x: 60, y: titleY + 30}, end: {x: width - 60, y: titleY + 30}, thickness: 1, color: rgb(0.8,0.8,0.8) });
-            drawCenter(coverData.assignmentType || 'ASSIGNMENT', titleY, helveticaBold, 22);
+            const titleText = `${coverData.assignmentType || ''} ${coverData.assignmentNo || ''}`.trim();
+            drawCenter(titleText, titleY, helveticaBold, 22);
             page.drawLine({ start: {x: 60, y: titleY - 15}, end: {x: width - 60, y: titleY - 15}, thickness: 1, color: rgb(0.8,0.8,0.8) });
 
             // Course Details
@@ -754,7 +948,11 @@
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `Lab_Report_${coverData.courseCode}.pdf`;
+        
+        let fName = document.getElementById('exportFileName').value.trim();
+        if (!fName) fName = 'Document';
+        link.download = `${fName}.pdf`;
+        
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -764,6 +962,25 @@
         alert("An error occurred while generating the PDF. Please try again.");
       } finally {
         setGeneratingState(false);
+      }
+    }
+
+    function resetFields() {
+      if (!confirm("Are you sure you want to clear all fields?")) return;
+      
+      const inputs = document.querySelectorAll('input[data-bind]');
+      inputs.forEach(input => {
+        input.value = '';
+        const key = input.getAttribute('data-bind');
+        coverData[key] = '';
+        const previewEl = document.getElementById(`preview-${key}`);
+        if (previewEl) previewEl.textContent = '';
+      });
+      
+      const exportFileNameInput = document.getElementById('exportFileName');
+      if (exportFileNameInput) {
+        exportFileNameInput.value = 'Lab_Report';
+        userEditedFileName = false;
       }
     }
 
